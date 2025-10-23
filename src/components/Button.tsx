@@ -35,11 +35,11 @@ export default function Button({
   };
 
   // Hover effect simple
-  const handleMouseEnter = (e) => {
-    if (!disabled) e.currentTarget.style.opacity = 0.85;
+  const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!disabled) e.currentTarget.style.opacity = '0.85';
   };
-  const handleMouseLeave = (e) => {
-    if (!disabled) e.currentTarget.style.opacity = 1;
+  const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!disabled) e.currentTarget.style.opacity = '1';
   };
 
   return (
