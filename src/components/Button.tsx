@@ -1,15 +1,26 @@
-// components/Button.jsx
-import React from "react";
+// components/Button.tsx
+import React, { CSSProperties } from "react";
+import { ReactNode } from "react";
+
+interface ButtonProps {
+  children: ReactNode;
+  onClick?: () => void;
+  color?: string;
+  textColor?: string;
+  disabled?: boolean;
+  style?: CSSProperties;
+  className?: string;
+}
 
 export default function Button({
-  children,
+   children,
   onClick,
-  color = "#0070f3", // couleur par défaut
-  textColor = "white", // texte blanc par défaut
+  color = "#0070f3",
+  textColor = "white",
   disabled = false,
   style = {},
-  className = {},
-}) {
+  className = "",
+}: ButtonProps) {
   const baseStyle = {
     backgroundColor: color,
     color: textColor,
