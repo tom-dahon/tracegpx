@@ -29,8 +29,29 @@ export default function Map() {
     return null;
   }
 
+  const clearPositions = () => {
+    setPositions([]);
+  };
+
   return (
-    <div style={{ height: '600px', width: '1200px' }}>
+    <div style={{ height: '600px', width: '1200px', position: 'relative' }}>
+        <button
+        onClick={clearPositions}
+        style={{
+          position: 'absolute',
+          zIndex: 1000,
+          top: 10,
+          right: 10,
+          padding: '8px 12px',
+          backgroundColor: '#ff4d4d',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+      >
+        Effacer le tracé
+      </button>
       <MapContainer
         center={position} // par exemple : Côte d’Azur
         zoom={12}
