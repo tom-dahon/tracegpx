@@ -1,19 +1,39 @@
-import Image from "next/image";
-import Link from "next/link";
+'use client';
+
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import GPXExporter from "@/components/GPXExporter";
+import RunStatsCard from "@/components/RunStatsCard";
+
+const TraceMap = dynamic(() => import("@/components/Map"), {
+  ssr: false, // désactive le rendu côté serveur pour Leaflet
+});
 
 export default function Home() {
+  // Typage TS du state positions
+  const [positions, setPositions] = useState<[number, number][]>([]);
+  const [paceStr, setPaceStr] = useState("5:00");
+
   return (
-    <div className="flex min-h-screen justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="text-center">
-       <div className="text-center flex flex-col space-y-4 mt-4">
-          <h1>Bienvenue sur TraceIt</h1>
-          <p>Créez votre parcours GPS et exportez-le en GPX.</p>
-       </div>
+    <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black px-4 lg:px-8">
+      <main className="w-full max-w-[1400px] mx-auto py-8 flex flex-col gap-8">
+        <h1 className="text-2xl text-center font-bold">Créez votre tracé</h1>
 
-      <Link href="/map" className="mt-8">
-        <button className="cursor-pointer border-3 rounded-md px-2 mt-20">Accéder à la carte</button>
-      </Link>
+        <TraceMap positions={positions} setPositions={setPositions} />
 
+        {/* Section formulaire + stats */}
+        <div className="flex flex-col lg:flex-row justify-center space-x-8">
+          <RunStatsCard points={positions} paceStr={paceStr} />
+
+          <GPXExporter
+            points={positions}
+            paceStr={paceStr}
+            setPaceStr={setPaceStr}
+            setPositions={setPositions} // fonctionne correctement maintenant
+          />
+        </div>
+
+        {/* Carte */}
       </main>
     </div>
   );
