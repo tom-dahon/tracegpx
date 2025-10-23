@@ -1,18 +1,30 @@
-// components/Input.jsx
-import React from "react";
+'use client';
+import React, { CSSProperties, ChangeEvent } from "react";
+
+interface InputProps {
+  value: string | number;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  width?: string;
+  padding?: string;
+  borderRadius?: string;
+  disabled?: boolean;
+  style?: CSSProperties;
+  type?: string;
+}
 
 export default function Input({
   value,
   onChange,
   placeholder = "",
-  width = "100%",      // largeur par défaut
+  width = "100%",
   padding = "12px 16px",
   borderRadius = "8px",
   disabled = false,
   style = {},
   type = "text",
-}) {
-  const baseStyle = {
+}: InputProps) {
+  const baseStyle: CSSProperties = {
     width,
     padding,
     borderRadius,
@@ -25,12 +37,12 @@ export default function Input({
     ...style,
   };
 
-  const handleFocus = (e) => {
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.currentTarget.style.borderColor = "#0070f3";
     e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,112,243,0.3)";
   };
 
-  const handleBlur = (e) => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.currentTarget.style.borderColor = "#ccc";
     e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
   };

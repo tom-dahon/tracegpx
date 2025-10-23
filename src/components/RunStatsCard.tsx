@@ -1,8 +1,15 @@
 'use client';
 import React, { useMemo } from "react";
 
+type Point = [number, number, number?];
+
+interface RunStatsCardProps {
+  points: Point[];
+  paceStr: string;
+}
+
 // Fonction utilitaire pour calculer la distance entre 2 points en km
-function getDistance(lat1, lon1, lat2, lon2) {
+function getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -16,23 +23,24 @@ function getDistance(lat1, lon1, lat2, lon2) {
 }
 
 // Parse "mm:ss" en minutes décimales
-function parsePace(paceStr) {
+function parsePace(paceStr: string): number {
   const parts = paceStr.split(":").map(Number);
   if (parts.length === 1) return parts[0];
   return parts[0] + parts[1] / 60;
 }
 
 // Format hh:mm:ss
-function formatDuration(sec) {
+function formatDuration(sec: number): string {
   const h = Math.floor(sec / 3600);
   const m = Math.floor((sec % 3600) / 60);
   const s = Math.floor(sec % 60);
   return [h, m, s].map((v) => v.toString().padStart(2, "0")).join(":");
 }
 
-export default function RunStatsCard({ points, paceStr }) {
+export default function RunStatsCard({ points, paceStr }: RunStatsCardProps) {
   const stats = useMemo(() => {
-    if (!points || points.length < 2) return { distance: 0, duration: 0, elevation: 0 };
+    if (!points || points.length < 2)
+      return { distance: 0, duration: 0, elevation: 0 };
 
     let distance = 0;
     let elevation = 0;
@@ -64,7 +72,10 @@ export default function RunStatsCard({ points, paceStr }) {
         <span>Duration</span>
         <span>{formatDuration(stats.duration)}</span>
       </div>
-      
+      <div className="flex justify-between text-gray-500">
+        <span>Elevation Gain</span>
+        <span>{stats.elevation.toFixed(0)} m</span>
+      </div>
     </div>
   );
 }

@@ -1,23 +1,41 @@
 'use client';
-import { useState } from "react";
+import React, { useState } from "react";
 import Input from "../components/Input";
 import Button from "./Button";
 
-export default function GPXExporter({ points, paceStr, setPaceStr, setPositions }) {
-  const [trackName, setTrackName] = useState("Mon tracé");
-  const [startTime, setStartTime] = useState(
+interface GPXExporterProps {
+  points: [number, number][]; // tableau de paires [lat, lon]
+  paceStr: string;
+  setPaceStr: React.Dispatch<React.SetStateAction<string>>;
+  setPositions: React.Dispatch<React.SetStateAction<[number, number][]>>;
+}
+
+export default function GPXExporter({
+  points,
+  paceStr,
+  setPaceStr,
+  setPositions,
+}: GPXExporterProps) {
+  const [trackName, setTrackName] = useState<string>("Mon tracé");
+  const [startTime, setStartTime] = useState<string>(
     new Date().toISOString().slice(0, 16)
   );
-  const clearPositions = () => setPositions([]);
+
+  const clearPositions = (): void => setPositions([]);
 
   // Parse "mm:ss" en minutes décimales
-  const parsePace = (paceStr) => {
+  const parsePace = (paceStr: string): number => {
     const parts = paceStr.split(":").map(Number);
     if (parts.length === 1) return parts[0];
     return parts[0] + parts[1] / 60;
   };
 
-  const getDistance = (lat1, lon1, lat2, lon2) => {
+  const getDistance = (
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ): number => {
     const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -30,7 +48,11 @@ export default function GPXExporter({ points, paceStr, setPaceStr, setPositions 
     return R * c;
   };
 
-  const generateGPX = (name, points, paceStr) => {
+  const generateGPX = (
+    name: string,
+    points: [number, number][],
+    paceStr: string
+  ): string => {
     if (!points || points.length === 0) return "";
     const paceMin = parsePace(paceStr);
 
@@ -54,7 +76,9 @@ export default function GPXExporter({ points, paceStr, setPaceStr, setPositions 
           const distKm = getDistance(prevLat, prevLng, lat, lng);
           totalTimeSec += distKm * paceMin * 60;
         }
-        const timestamp = new Date(start.getTime() + totalTimeSec * 1000).toISOString();
+        const timestamp = new Date(
+          start.getTime() + totalTimeSec * 1000
+        ).toISOString();
         return `<trkpt lat="${lat}" lon="${lng}">
   <time>${timestamp}</time>
 </trkpt>`;
@@ -69,13 +93,12 @@ export default function GPXExporter({ points, paceStr, setPaceStr, setPositions 
     return header + pointsXml + footer;
   };
 
-  const downloadGPX = () => {
+  const downloadGPX = (): void => {
     if (!points || points.length === 0) {
       alert("Aucun point à exporter !");
       return;
     }
     const gpxContent = generateGPX(trackName, points, paceStr);
-    
     const blob = new Blob([gpxContent], { type: "application/gpx+xml" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -87,17 +110,14 @@ export default function GPXExporter({ points, paceStr, setPaceStr, setPositions 
 
   return (
     <div className="flex justify-center p-3">
-      <div className="w-full max-w-[1200px] flex flex-col gap-4  ">
-
-        <label className="flex flex-col gap-1 ">
+      <div className="w-full max-w-[1200px] flex flex-col gap-4">
+        <label className="flex flex-col gap-1">
           <span className="font-semibold">Nom du parcours</span>
-           <Input
-          value={trackName}
-          onChange={(e) => setTrackName(e.target.value)}
-        />
+          <Input
+            value={trackName}
+            onChange={(e) => setTrackName(e.target.value)}
+          />
         </label>
-
-       
 
         <label className="flex flex-col gap-1">
           <span className="font-semibold">Date et heure de début :</span>
@@ -109,28 +129,25 @@ export default function GPXExporter({ points, paceStr, setPaceStr, setPositions 
         </label>
 
         <label className="flex flex-col gap-1">
-        <span className="font-semibold">Allure moyenne (min/km)</span>
+          <span className="font-semibold">Allure moyenne (min/km)</span>
           <Input
             type="text"
             value={paceStr}
-            onChange={(e) => setPaceStr(e.target.value)} 
+            onChange={(e) => setPaceStr(e.target.value)}
           />
         </label>
 
         <div className="flex justify-between space-x-12 mt-2">
-            <Button
-          onClick={downloadGPX}
-          className="bg-blue-400! font-semibold!"
-        >
-          Télécharger GPX
-        </Button>
+          <Button onClick={downloadGPX} className="bg-blue-400! font-semibold!">
+            Télécharger GPX
+          </Button>
 
-        <Button
-          onClick={clearPositions}
-          className="bg-gray-100! text-gray-800! font-semibold!"
-        >
-          Effacer le parcours
-        </Button>
+          <Button
+            onClick={clearPositions}
+            className="bg-gray-100! text-gray-800! font-semibold!"
+          >
+            Effacer le parcours
+          </Button>
         </div>
       </div>
     </div>
