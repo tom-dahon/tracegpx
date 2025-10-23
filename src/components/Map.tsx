@@ -58,7 +58,7 @@ export default function Map({ positions, setPositions }: MapProps) {
       <MapContainer
         center={defaultCenter}
         zoom={12}
-        style={{ width: '100%', minHeight: '250px', borderRadius: '10px' }}
+        style={{ width: '100%', minHeight: '250px', height: '30vh', borderRadius: '10px' }}
       >
         <TileLayer
          {...{
