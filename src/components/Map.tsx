@@ -40,20 +40,7 @@ export default function Map({ positions, setPositions }: MapProps) {
 
   return (
     <div className="w-full max-w-[1200px] mx-auto relative">
-      {/* Bouton Effacer */}
-      <Button
-        onClick={clearPositions}
-        style={{
-          position: 'absolute',
-          top: 10,
-          right: 10,
-          zIndex: 1000,
-          backgroundColor: '#ff4d4d',
-          color: 'white',
-        }}
-      >
-        Effacer le tracé
-      </Button>
+    
 
       <MapContainer
         center={defaultCenter}
