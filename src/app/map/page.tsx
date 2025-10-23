@@ -10,28 +10,31 @@ const TraceMap = dynamic(() => import("@/components/Map"), {
 });
 
 export default function MapPage() {
-  const [positions, setPositions] = useState([]);
+  // Typage TS du state positions
+  const [positions, setPositions] = useState<[number, number][]>([]);
   const [paceStr, setPaceStr] = useState("5:00");
 
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black px-4 lg:px-8">
-  <main className="w-full max-w-[1400px] mx-auto py-8 flex flex-col gap-8">
-    <h1 className="text-2xl text-center font-bold ">Créez votre tracé</h1>
+      <main className="w-full max-w-[1400px] mx-auto py-8 flex flex-col gap-8">
+        <h1 className="text-2xl text-center font-bold">Créez votre tracé</h1>
 
         <TraceMap positions={positions} setPositions={setPositions} />
 
+        {/* Section formulaire + stats */}
+        <div className="flex flex-col lg:flex-row justify-center space-x-8">
+          <RunStatsCard points={positions} paceStr={paceStr} />
 
-    {/* Section formulaire + stats */}
-    <div className="flex flex-col lg:flex-row  justify-center space-x-8">
-            <RunStatsCard points={positions} paceStr={paceStr} />
+          <GPXExporter
+            points={positions}
+            paceStr={paceStr}
+            setPaceStr={setPaceStr}
+            setPositions={setPositions} // fonctionne correctement maintenant
+          />
+        </div>
 
-    <GPXExporter points={positions} paceStr={paceStr} setPaceStr={setPaceStr} setPositions={setPositions}/>
-
+        {/* Carte */}
+      </main>
     </div>
-
-    {/* Carte */}
-  </main>
-</div>
-
   );
 }
