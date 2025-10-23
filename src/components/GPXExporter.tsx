@@ -1,12 +1,14 @@
 'use client';
 import { useState } from "react";
 import Input from "../components/Input";
+import Button from "./Button";
 
-export default function GPXExporter({ points, paceStr, setPaceStr }) {
+export default function GPXExporter({ points, paceStr, setPaceStr, setPositions }) {
   const [trackName, setTrackName] = useState("Mon tracé");
   const [startTime, setStartTime] = useState(
     new Date().toISOString().slice(0, 16)
   );
+  const clearPositions = () => setPositions([]);
 
   // Parse "mm:ss" en minutes décimales
   const parsePace = (paceStr) => {
@@ -73,6 +75,7 @@ export default function GPXExporter({ points, paceStr, setPaceStr }) {
       return;
     }
     const gpxContent = generateGPX(trackName, points, paceStr);
+    
     const blob = new Blob([gpxContent], { type: "application/gpx+xml" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -83,17 +86,21 @@ export default function GPXExporter({ points, paceStr, setPaceStr }) {
   };
 
   return (
-    <div className="flex justify-center p-4">
-      <div className="w-full max-w-[1200px] flex flex-col gap-4 p-6 ">
+    <div className="flex justify-center p-3">
+      <div className="w-full max-w-[1200px] flex flex-col gap-4  ">
 
-        <Input
+        <label className="flex flex-col gap-1 ">
+          <span className="font-semibold">Nom du parcours</span>
+           <Input
           value={trackName}
           onChange={(e) => setTrackName(e.target.value)}
-          placeholder="Nom du tracé"
         />
+        </label>
+
+       
 
         <label className="flex flex-col gap-1">
-          Date et heure de début :
+          <span className="font-semibold">Date et heure de début :</span>
           <Input
             type="datetime-local"
             value={startTime}
@@ -102,20 +109,29 @@ export default function GPXExporter({ points, paceStr, setPaceStr }) {
         </label>
 
         <label className="flex flex-col gap-1">
-          Allure moyenne (min/km)
+        <span className="font-semibold">Allure moyenne (min/km)</span>
           <Input
             type="text"
             value={paceStr}
-            onChange={(e) => setPaceStr(e.target.value)} // <-- utilise bien le setter du parent
+            onChange={(e) => setPaceStr(e.target.value)} 
           />
         </label>
 
-        <button
+        <div className="flex justify-between space-x-12 mt-2">
+            <Button
           onClick={downloadGPX}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className="bg-blue-400! font-semibold!"
         >
-          Exporter GPX
-        </button>
+          Télécharger GPX
+        </Button>
+
+        <Button
+          onClick={clearPositions}
+          className="bg-gray-100! text-gray-800! font-semibold!"
+        >
+          Effacer le parcours
+        </Button>
+        </div>
       </div>
     </div>
   );

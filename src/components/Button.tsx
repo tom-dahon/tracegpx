@@ -8,18 +8,18 @@ export default function Button({
   textColor = "white", // texte blanc par défaut
   disabled = false,
   style = {},
+  className = {},
 }) {
   const baseStyle = {
     backgroundColor: color,
     color: textColor,
-    padding: "12px 24px",
+    padding: "12px 12px",
     borderRadius: "8px", // radius par défaut
     border: "none",
     cursor: disabled ? "not-allowed" : "pointer",
-    fontWeight: "bold",
+    fontWeight: "medium",
     fontSize: "16px",
     transition: "0.2s all",
-    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
     ...style,
   };
 
@@ -36,6 +36,7 @@ export default function Button({
       onClick={onClick}
       disabled={disabled}
       style={baseStyle}
+      className={className}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

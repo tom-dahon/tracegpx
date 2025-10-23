@@ -22,10 +22,10 @@ export default function MapPage() {
 
 
     {/* Section formulaire + stats */}
-    <div className="flex flex-col lg:flex-row items-start justify-center space-x-8">
+    <div className="flex flex-col lg:flex-row  justify-center space-x-8">
             <RunStatsCard points={positions} paceStr={paceStr} />
 
-    <GPXExporter points={positions} paceStr={paceStr} setPaceStr={setPaceStr} />
+    <GPXExporter points={positions} paceStr={paceStr} setPaceStr={setPaceStr} setPositions={setPositions}/>
 
     </div>
 

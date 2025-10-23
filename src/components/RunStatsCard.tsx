@@ -55,12 +55,12 @@ export default function RunStatsCard({ points, paceStr }) {
 
   return (
     <div className="p-3 -mt-2 w-full max-w-sm">
-      <h2 className="font-bold text-lg mb-2">Run Stats</h2>
-      <div className="flex justify-between">
+      <h2 className="font-bold text-md mb-2">Run Stats</h2>
+      <div className="flex justify-between text-gray-500">
         <span>Distance</span>
         <span>{stats.distance.toFixed(2)} km</span>
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between text-gray-500">
         <span>Duration</span>
         <span>{formatDuration(stats.duration)}</span>
       </div>

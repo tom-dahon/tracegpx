@@ -25,28 +25,15 @@ export default function Map({ positions, setPositions }) {
     return null;
   }
 
-  const clearPositions = () => setPositions([]);
 
   return (
 <div className="w-full max-w-[1200px] mx-auto  relative">
-  {/* Bouton Effacer */}
-  <Button
-    onClick={clearPositions}
-    style={{
-      position: "absolute",
-      top: 10,
-      right: 10,
-      zIndex: 1000,
-    }}
-    color="#ff4d4d"
-  >
-    Effacer le tracé
-  </Button>
+  
 
   <MapContainer
     center={defaultCenter}
     zoom={12}
-    style={{ width: '100%', minHeight: '250px' }}
+    style={{ width: '100%', minHeight: '250px', borderRadius: '10px' }}
   >
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
