@@ -106,6 +106,8 @@ export default function GPXExporter({
     a.download = `${trackName.replace(/\s/g, "_")}.gpx`;
     a.click();
     URL.revokeObjectURL(url);
+
+    clearPositions();
   };
 
   return (
