@@ -4,6 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import GPXExporter from "@/components/GPXExporter";
 import RunStatsCard from "@/components/RunStatsCard";
+import NavBar from "@/components/NavBar";
 
 const TraceMap = dynamic(() => import("@/components/Map"), {
   ssr: false, // désactive le rendu côté serveur pour Leaflet
@@ -15,9 +16,8 @@ export default function Home() {
   const [paceStr, setPaceStr] = useState("5:00");
 
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black px-4 lg:px-8">
+    <div className="min-h-screen font-sans dark:bg-black px-4 lg:px-8">
       <main className="w-full mx-auto py-8 flex flex-col gap-8">
-        <h1 className="text-2xl text-center font-bold">Créez votre tracé</h1>
 
         <div className="flex flex-col md:flex-row space-x-4 gap-4 md:items-start">
           <div className="md:w-2/3 lg:w-4/5"><TraceMap positions={positions} setPositions={setPositions} /></div>

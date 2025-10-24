@@ -63,17 +63,17 @@ export default function RunStatsCard({ points, paceStr }: RunStatsCardProps) {
 
   return (
     <div className="p-3 -mt-2 w-full mx-auto">
-      <h2 className="font-bold text-md mb-2">Run Stats</h2>
+      <h2 className="font-bold text-md mb-2">Statistiques de la course</h2>
       <div className="flex justify-between text-gray-500">
         <span>Distance</span>
         <span>{stats.distance.toFixed(2)} km</span>
       </div>
       <div className="flex justify-between text-gray-500">
-        <span>Duration</span>
+        <span>Durée</span>
         <span>{formatDuration(stats.duration)}</span>
       </div>
       <div className="flex justify-between text-gray-500">
-        <span>Elevation Gain</span>
+        <span>Altitude</span>
         <span>{stats.elevation.toFixed(0)} m</span>
       </div>
     </div>
