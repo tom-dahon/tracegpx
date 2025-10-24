@@ -16,13 +16,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black px-4 lg:px-8">
-      <main className="w-full max-w-[1400px] mx-auto py-8 flex flex-col gap-8">
+      <main className="w-full mx-auto py-8 flex flex-col gap-8">
         <h1 className="text-2xl text-center font-bold">Créez votre tracé</h1>
 
-        <TraceMap positions={positions} setPositions={setPositions} />
+        <div className="flex flex-col md:flex-row space-x-4 gap-4 md:items-start">
+          <div className="md:w-2/3 lg:w-4/5"><TraceMap positions={positions} setPositions={setPositions} /></div>
 
         {/* Section formulaire + stats */}
-        <div className="flex flex-col lg:flex-row justify-center space-x-8">
+        <div className="flex flex-col justify-center space-x-8 md:w-1/3 lg:w-1/5">
           <RunStatsCard points={positions} paceStr={paceStr} />
 
           <GPXExporter
@@ -32,8 +33,8 @@ export default function Home() {
             setPositions={setPositions} // fonctionne correctement maintenant
           />
         </div>
+        </div>
 
-        {/* Carte */}
       </main>
     </div>
   );

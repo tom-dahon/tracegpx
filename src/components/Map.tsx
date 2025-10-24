@@ -39,13 +39,15 @@ export default function Map({ positions, setPositions }: MapProps) {
   const clearPositions = (): void => setPositions([]);
 
   return (
-    <div className="w-full max-w-[1200px] mx-auto relative">
+    <div className="w-full mx-auto relative">
     
 
       <MapContainer
         center={defaultCenter}
         zoom={12}
-        style={{ width: '100%', minHeight: '250px', height: '30vh', borderRadius: '10px' }}
+        style={{ width: '100%', minHeight: '250px', height: '35vh', borderRadius: '10px' }}
+
+        className="md:h-[80vh]!"
       >
         <TileLayer
          {...{

@@ -137,14 +137,14 @@ export default function GPXExporter({
           />
         </label>
 
-        <div className="flex justify-between space-x-12 mt-2">
-          <Button onClick={downloadGPX} className="bg-blue-400! font-semibold!">
+        <div className="flex lg:flex-col justify-between space-x-8 mt-2 space-y-2">
+          <Button onClick={downloadGPX} className="bg-blue-400! font-semibold! lg:w-full">
             Télécharger GPX
           </Button>
 
           <Button
             onClick={clearPositions}
-            className="bg-gray-100! text-gray-800! font-semibold!"
+            className="bg-gray-100! text-gray-800! font-semibold! lg:w-full"
           >
             Effacer le parcours
           </Button>

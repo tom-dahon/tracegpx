@@ -19,7 +19,8 @@ export default function MapPage() {
       <main className="w-full max-w-[1400px] mx-auto py-8 flex flex-col gap-8">
         <h1 className="text-2xl text-center font-bold">Créez votre tracé</h1>
 
-        <TraceMap positions={positions} setPositions={setPositions} />
+        <div className="grid grid-cols-1 lg:grid-cols-3">
+          <TraceMap positions={positions} setPositions={setPositions} />
 
         {/* Section formulaire + stats */}
         <div className="flex flex-col lg:flex-row justify-center space-x-8">
@@ -32,8 +33,8 @@ export default function MapPage() {
             setPositions={setPositions} // fonctionne correctement maintenant
           />
         </div>
+        </div>
 
-        {/* Carte */}
       </main>
     </div>
   );

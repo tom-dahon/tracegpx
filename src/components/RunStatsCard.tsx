@@ -62,7 +62,7 @@ export default function RunStatsCard({ points, paceStr }: RunStatsCardProps) {
   }, [points, paceStr]);
 
   return (
-    <div className="p-3 -mt-2 w-full max-w-sm">
+    <div className="p-3 -mt-2 w-full mx-auto">
       <h2 className="font-bold text-md mb-2">Run Stats</h2>
       <div className="flex justify-between text-gray-500">
         <span>Distance</span>
