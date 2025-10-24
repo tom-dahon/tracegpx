@@ -24,7 +24,7 @@ export default function NavBar() {
 
            <div className="flex items-center gap-4">
         <button
-          onClick={() => window.open('https://forms.gle/xxxx', '_blank')}
+          onClick={() => window.open('https://forms.gle/LmyEcgzK7an579kZ8', '_blank')}
           className="text-white font-semibold hover:underline cursor-pointer"
     
         >
