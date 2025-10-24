@@ -140,7 +140,7 @@ export default function GPXExporter({
         </label>
 
         <div className="flex lg:flex-col justify-between space-x-8 mt-2 space-y-2">
-          <Button onClick={downloadGPX} className="bg-blue-400! font-semibold! lg:w-full">
+          <Button onClick={downloadGPX} className="bg-blue-400! font-semibold! lg:w-full" style={{backgroundColor: '#fc4c02 !important'}}>
             Télécharger GPX
           </Button>
 
