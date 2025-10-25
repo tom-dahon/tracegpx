@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -8,9 +8,8 @@ import {
   useMapEvents,
   Marker,
 } from 'react-leaflet';
-import L, { LatLng } from 'leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import Button from './Button';
 
 interface MapProps {
   positions: [number, number][];
@@ -25,7 +24,11 @@ const markerIcon = new L.Icon({
 
 export default function Map({ positions, setPositions }: MapProps) {
   const defaultCenter: [number, number] = [43.6, 7.0];
+  const [query, setQuery] = useState('');
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const mapRef = useRef<L.Map | null>(null);
 
+  // Ajouter un marker sur clic
   function LocationMarker() {
     useMapEvents({
       click(e: L.LeafletMouseEvent) {
@@ -36,25 +39,93 @@ export default function Map({ positions, setPositions }: MapProps) {
     return null;
   }
 
+  // Récupération des suggestions d’adresses
+  useEffect(() => {
+    const controller = new AbortController();
+    if (query.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(
+            query
+          )}`,
+          { signal: controller.signal }
+        );
+        const data = await res.json();
+        setSuggestions(data);
+      } catch {
+        // ignore abort
+      }
+    }, 400);
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [query]);
+
+  const handleSelect = (item: any) => {
+  const lat = parseFloat(item.lat);
+  const lon = parseFloat(item.lon);
+
+  setPositions([[lat, lon]]);
+  setQuery(''); 
+  setSuggestions([]); 
+
+  if (mapRef.current) {
+    mapRef.current.flyTo([lat, lon], 14, { duration: 1.5 });
+  }
+};
+
   const clearPositions = (): void => setPositions([]);
 
   return (
     <div className="w-full mx-auto relative">
-    
+      {/* 🔍 Barre de recherche */}
+      <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[1000] w-80">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Rechercher une adresse..."
+          className="w-full px-4 py-2 rounded-xl bg-white border border-gray-300 shadow-sm text-sm focus:outline-none"
+        />
+        {suggestions.length > 0 && (
+          <ul className="bg-white border border-gray-200 shadow-md rounded-b-xl max-h-48 overflow-y-auto text-sm">
+            {suggestions.map((item, i) => (
+              <li
+                key={i}
+                onClick={() => handleSelect(item)}
+                className="px-3 py-2 hover:bg-blue-100 cursor-pointer"
+              >
+                {item.display_name}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
+      {/* 🗺️ Carte Leaflet */}
       <MapContainer
         center={defaultCenter}
         zoom={12}
-        style={{ width: '100%', minHeight: '250px', height: '35vh', borderRadius: '10px' }}
-
+        ref={mapRef}
+        style={{
+          width: '100%',
+          minHeight: '250px',
+          height: '35vh',
+          borderRadius: '10px',
+        }}
         className="md:h-[80vh]!"
       >
         <TileLayer
-         {...{
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    detectRetina: true
-  }}
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          detectRetina={true}
         />
         <LocationMarker />
         {positions.length > 1 && <Polyline positions={positions} color="red" />}
