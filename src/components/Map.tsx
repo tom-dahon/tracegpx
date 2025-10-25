@@ -10,6 +10,7 @@ import {
 } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { ArrowUturnLeftIcon } from '@heroicons/react/24/solid';
 
 interface MapProps {
   positions: [number, number][];
@@ -27,6 +28,10 @@ export default function Map({ positions, setPositions }: MapProps) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const mapRef = useRef<L.Map | null>(null);
+
+  const removeLastPosition = () => {
+  setPositions((prev) => prev.slice(0, -1));
+};
 
   // Ajouter un marker sur clic
   function LocationMarker() {
@@ -85,6 +90,15 @@ export default function Map({ positions, setPositions }: MapProps) {
 
   return (
     <div className="w-full mx-auto relative">
+
+      <button
+  onClick={removeLastPosition}
+  className="absolute top-2 right-3 z-[1000] bg-white  rounded-full p-2 shadow hover:bg-gray-100 cursor-pointer"
+  title="Supprimer dernier marker"
+>
+  <ArrowUturnLeftIcon className="w-5 h-5 text-gray-700" />
+</button>
+
       {/* 🔍 Barre de recherche */}
       <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[1000] w-80">
         <input
