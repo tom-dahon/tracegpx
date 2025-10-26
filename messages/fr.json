@@ -1,5 +1,21 @@
 {
     "navbar": {
-    "feedback": "Donner ton avis"
+      "feedback": "Donne ton avis"
+  },
+
+  "gpxexporter": {
+    "route": "Nom du parcours",
+    "start_date": "Date et heure de début",
+    "average_pace": "Allure moyenne (min/km)",
+    "clear_button": "Effacer parcours",
+    "download_gpx": "Télécharger",
+    "my_trace": "Mon parcours"
+  },
+  
+  "runstats": {
+    "title": "Statistiques de la course",
+    "distance": "Distance",
+    "duration": "Durée",
+    "altitude": "Altitude"
   }
 }
