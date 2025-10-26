@@ -93,14 +93,14 @@ export default function Map({ positions, setPositions }: MapProps) {
 
       <button
   onClick={removeLastPosition}
-  className="absolute top-2 right-3 z-[1000] bg-white  rounded-full p-2 shadow hover:bg-gray-100 cursor-pointer"
+  className="absolute top-2 right-3 z-[900] bg-white  rounded-full p-2 shadow hover:bg-gray-100 cursor-pointer"
   title="Supprimer dernier marker"
 >
   <ArrowUturnLeftIcon className="w-5 h-5 text-gray-700" />
 </button>
 
       {/* 🔍 Barre de recherche */}
-      <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[1000] w-80">
+      <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[900] w-80">
         <input
           type="text"
           value={query}
