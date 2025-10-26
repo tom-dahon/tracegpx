@@ -10,7 +10,8 @@
     "clear_button": "Effacer parcours",
     "download_gpx": "Télécharger",
     "my_trace": "Mon parcours",
-    "error": "Aucun parcours à exporter !"
+    "error_no_points": "Aucun parcours à exporter !",
+    "error_invalid_pace": "L'allure est invalide"
   },
   
   "runstats": {

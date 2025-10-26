@@ -23,8 +23,6 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const dynamicStyle: React.CSSProperties = {
-    backgroundColor: color,
-    color: textColor,
     ...style,
   };
 
@@ -35,8 +33,8 @@ export default function Button({
       style={dynamicStyle}
       className={clsx(
         // Base styles
-        "px-4 py-2 rounded-lg font-medium transition-all duration-200",
-        "focus:outline-none focus:ring-2 focus:ring-offset-2",
+        "px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer",
+        "focus:outline-none focus:ring-2 focus:ring-offset-2 bg-" + color + " text-" + textColor,
         // Disabled styles
         disabled
           ? "opacity-60 cursor-not-allowed"

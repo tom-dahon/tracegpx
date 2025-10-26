@@ -10,7 +10,8 @@
     "clear_button": "Clear Route",
     "download_gpx": "Download",
     "my_trace": "My track",
-    "error": "No track to export !"
+    "error_no_points": "No track to export !",
+    "error_invalid_pace": "Pace is invalid"
   },
   
   "runstats": {

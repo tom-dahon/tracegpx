@@ -1,177 +1,165 @@
 'use client';
-import React, { useState } from "react";
+
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Input from "../components/Input";
 import Button from "./Button";
 import { useTranslations } from "next-intl";
+import { generateGPX } from "@/utils/gpx";
+import { getLocalDateTime } from "@/utils/date";
+import { downloadFile } from "@/utils/download";
+
+export type LatLng = [number, number];
+export type GPXError = "NO_POINTS" | "INVALID_PACE" | "NO_TRACK_NAME" | null;
 
 interface GPXExporterProps {
-  points: [number, number][]; // tableau de paires [lat, lon]
+  points: LatLng[];
   paceStr: string;
   setPaceStr: React.Dispatch<React.SetStateAction<string>>;
-  setPositions: React.Dispatch<React.SetStateAction<[number, number][]>>;
+  setPositions: React.Dispatch<React.SetStateAction<LatLng[]>>;
 }
 
+/**
+ * GPXExporter component allows exporting a GPX file for the current route
+ */
 export default function GPXExporter({
   points,
   paceStr,
   setPaceStr,
   setPositions,
 }: GPXExporterProps) {
-    const t = useTranslations('gpxexporter');
-  const [trackName, setTrackName] = useState<string>(t('my_trace'));
-  const [error, setError] = useState<string | null>(null);
-  
+  const t = useTranslations("gpxexporter");
 
-  const getLocalDateTime = () => {
-  const now = new Date();
-  const YYYY = now.getFullYear();
-  const MM = String(now.getMonth() + 1).padStart(2, '0');
-  const DD = String(now.getDate()).padStart(2, '0');
-  const HH = String(now.getHours()).padStart(2, '0');
-  const mm = String(now.getMinutes()).padStart(2, '0');
-  return `${YYYY}-${MM}-${DD}T${HH}:${mm}`;
-};
+  // Track name state
+  const [trackName, setTrackName] = useState<string>(t("my_trace"));
+  // Start time state
+  const [startTime, setStartTime] = useState<string>(getLocalDateTime());
+  // Error state
+  const [error, setError] = useState<GPXError>(null);
+  // Key to force re-render for smooth reset animation
+  const [resetKey, setResetKey] = useState<number>(0);
 
-const [startTime, setStartTime] = useState(getLocalDateTime());
+  // Automatically clear error after 4 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
+  /** Clears all points and resets all states */
   const clearPositions = (): void => {
-    setPositions([])
+    setPositions([]);
     setError(null);
+    setTrackName("");
+    setStartTime(getLocalDateTime());
+    setPaceStr("");
+    setResetKey(prev => prev + 1); // force re-render for animation
   };
 
-  // Parse "mm:ss" en minutes décimales
-  const parsePace = (paceStr: string): number => {
-    const parts = paceStr.split(":").map(Number);
-    if (parts.length === 1) return parts[0];
-    return parts[0] + parts[1] / 60;
+  /** Validate pace string format mm:ss */
+  const validatePace = (): boolean => {
+    if (!/^(\d+:\d+)$/.test(paceStr)) {
+      setError("INVALID_PACE");
+      return false;
+    }
+    return true;
   };
 
-  const getDistance = (
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
-  ): number => {
-    const R = 6371;
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) ** 2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  };
-
-  const generateGPX = (
-    name: string,
-    points: [number, number][],
-    paceStr: string
-  ): string => {
-    if (!points || points.length === 0) return "";
-    const paceMin = parsePace(paceStr);
-
-    const header = `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<gpx version="1.1" creator="TraceGPX"
-     xmlns="http://www.topografix.com/GPX/1/1"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://www.topografix.com/GPX/1/1 
-                         http://www.topografix.com/GPX/1/1/gpx.xsd">
-  <trk>
-    <name>${name}</name>
-    <trkseg>`;
-
-    const start = new Date(startTime);
-    let totalTimeSec = 0;
-
-    const pointsXml = points
-      .map(([lat, lng], i, arr) => {
-        if (i > 0) {
-          const [prevLat, prevLng] = arr[i - 1];
-          const distKm = getDistance(prevLat, prevLng, lat, lng);
-          totalTimeSec += distKm * paceMin * 60;
-        }
-        const timestamp = new Date(
-          start.getTime() + totalTimeSec * 1000
-        ).toISOString();
-        return `<trkpt lat="${lat}" lon="${lng}">
-  <time>${timestamp}</time>
-</trkpt>`;
-      })
-      .join("");
-
-    const footer = `
-    </trkseg>
-  </trk>
-</gpx>`;
-
-    return header + pointsXml + footer;
-  };
-
+  /** Download GPX file */
   const downloadGPX = (): void => {
     if (!points || points.length === 0) {
-      setError(t('error'));
+      setError("NO_POINTS");
       return;
     }
-    const gpxContent = generateGPX(trackName, points, paceStr);
-    const blob = new Blob([gpxContent], { type: "application/gpx+xml" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${trackName.replace(/\s/g, "_")}.gpx`;
-    a.click();
-    URL.revokeObjectURL(url);
-    setError(null);
+
+    if (!trackName.trim()) {
+      setError("NO_TRACK_NAME");
+      return;
+    }
+
+    if (!validatePace()) return;
+
+    const gpxContent = generateGPX(trackName, points, paceStr, startTime);
+    downloadFile(gpxContent, trackName);
+
     clearPositions();
   };
 
+  /** Return localized error message */
+  const errorMessage = (): string => {
+    switch (error) {
+      case "NO_POINTS": return t("error_no_points");
+      case "INVALID_PACE": return t("error_invalid_pace");
+      case "NO_TRACK_NAME": return t("error_no_track_name");
+      default: return "";
+    }
+  };
 
   return (
     <div className="flex justify-center p-3">
       <div className="w-full max-w-[1200px] flex flex-col gap-4">
-        <label className="flex flex-col gap-1">
-          <span className="font-semibold">{t('route')}</span>
+
+        {/* Track name input */}
+        <label htmlFor="trackName" className="flex flex-col gap-1">
+          <span className="font-semibold">{t("route")}</span>
           <Input
+            key={`track-${resetKey}`} // force re-render for smooth reset
             value={trackName}
-            onChange={(e) => setTrackName(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setTrackName(e.target.value)}
+            className="transition-all duration-300"
           />
         </label>
 
-        <label className="flex flex-col gap-1">
-          <span className="font-semibold">{t('start_date')}</span>
+        {/* Start date and time input */}
+        <label htmlFor="startTime" className="flex flex-col gap-1">
+          <span className="font-semibold">{t("start_date")}</span>
           <Input
+            key={`start-${resetKey}`} // force re-render for smooth reset
             type="datetime-local"
             value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setStartTime(e.target.value)}
+            className="transition-all duration-300 cursor-pointer"
           />
         </label>
 
+        {/* Average pace input */}
         <label className="flex flex-col gap-1">
-          <span className="font-semibold">{t('average_pace')}</span>
+          <span className="font-semibold">{t("average_pace")}</span>
           <Input
+            key={`pace-${resetKey}`} // force re-render for smooth reset
             type="text"
             value={paceStr}
-            onChange={(e) => setPaceStr(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPaceStr(e.target.value)}
+            className="transition-all duration-300"
+            placeholder="5:00"
           />
         </label>
 
+        {/* Error message */}
         {error ? (
-  <p className="text-red-600 text-sm h-3 -mt-2">{error}</p>
-) : (
-  <p className="h-3 -mt-2" />
-)}
+          <p className="text-red-600 text-sm h-3 -mt-2">{errorMessage()}</p>
+        ) : (
+          <p className="h-3 -mt-2" />
+        )}
 
-        <div className="flex md:flex-col justify-between  md:space-y-2">
-          <Button onClick={downloadGPX} className="bg-strava! w-auto font-semibold! md:w-full">
-            {t('download_gpx')}
+        {/* Action buttons */}
+        <div className="flex md:flex-col justify-between md:space-y-2">
+          <Button
+            onClick={downloadGPX}
+            color="strava"
+            textColor="white"
+            className="w-auto font-semibold md:w-full"
+          >
+            {t("download_gpx")}
           </Button>
 
           <Button
             onClick={clearPositions}
-            className="bg-gray-100! text-gray-800! font-semibold! w-auto md:w-full"
+            color="gray-100"
+            textColor="gray-800"
+            className="font-semibold w-auto md:w-full"
           >
-            {t('clear_button')}
+            {t("clear_button")}
           </Button>
         </div>
       </div>
