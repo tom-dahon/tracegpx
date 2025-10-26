@@ -17,5 +17,9 @@
     "distance": "Distance",
     "duration": "Durée",
     "altitude": "Altitude"
+  },
+
+  "map": {
+    "search": "Rechercher une adresse"
   }
 }

@@ -11,6 +11,7 @@ import {
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/solid';
+import { useTranslations } from 'next-intl';
 
 interface MapProps {
   positions: [number, number][];
@@ -87,6 +88,7 @@ export default function Map({ positions, setPositions }: MapProps) {
 };
 
   const clearPositions = (): void => setPositions([]);
+  const t = useTranslations('map');
 
   return (
     <div className="w-full mx-auto relative">
@@ -105,7 +107,7 @@ export default function Map({ positions, setPositions }: MapProps) {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Rechercher une adresse..."
+          placeholder= {t('search') + '...'}
           className="w-full px-4 py-2 rounded-xl bg-white border border-gray-300 shadow-sm text-sm focus:outline-none"
         />
         {suggestions.length > 0 && (
