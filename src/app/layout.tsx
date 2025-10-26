@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,10 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-   title: "TraceGpx – Crée ton parcours GPX de running en 1 clic",
+  title: "TraceGpx – Crée ton parcours GPX de running en 1 clic",
   description:
     "TraceGpx te permet de tracer facilement ton parcours de course à pied sur carte et de télécharger ton fichier GPX pour Strava, Garmin, etc.",
-    openGraph: {
+  openGraph: {
     title: "TraceGpx – Tracer ton parcours de running",
     description: "Trace ton itinéraire, télécharge ton fichier GPX et partage-le facilement.",
     url: "https://tracegpx.vercel.app",
@@ -41,17 +42,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <meta name="google-site-verification" content="Q3AvoEcyxM-ZP5OPXf-rDv9neMkjkTT2Vs13s4iFjLw" />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+          rel="stylesheet"
+        />
+        {/* Google tag (gtag.js) */}
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-1835B48Q2B" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-1835B48Q2B');
+          `}
+        </Script>
       </head>
-      <title>TraceGPX – Crée ton parcours de running GPS en 1 clic</title>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-50!`}
-      >
-                      <NavBar/>
-
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-50`}>
+        <NavBar />
         {children}
       </body>
     </html>
