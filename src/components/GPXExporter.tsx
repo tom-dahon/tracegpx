@@ -152,9 +152,8 @@ export default function GPXExporter({
         <div className="flex md:flex-col justify-between md:space-y-2">
           <Button
             onClick={downloadGPX}
-            color="strava"
             textColor="white"
-            className="w-auto font-semibold md:w-full"
+            className="w-auto bg-strava font-semibold md:w-full"
           >
             {t("download_gpx")}
           </Button>
