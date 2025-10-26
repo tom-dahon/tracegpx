@@ -10,10 +10,6 @@ export default function NavBar() {
   const router = useRouter();
   const t = useTranslations();
 
-  const changeLocale = (locale: string) => {
-    router.push(`/${locale}${window.location.pathname}`);
-  };
-
   return (
     <nav className="relative flex justify-between items-center p-4 bg-[#fc4c02]">
       {/* Logo */}
@@ -28,7 +24,7 @@ export default function NavBar() {
       <div className="hidden md:flex items-center gap-4">
         <button
           onClick={() => window.open('https://forms.gle/LmyEcgzK7an579kZ8', '_blank')}
-          className="text-white font-semibold hover:underline"
+          className="text-white font-semibold hover:underline cursor-pointer"
         >
           {t('navbar.feedback')}
         </button>
