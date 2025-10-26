@@ -9,7 +9,8 @@
     "average_pace": "Average Pace (min/km)",
     "clear_button": "Clear Route",
     "download_gpx": "Download",
-    "my_trace": "My track"
+    "my_trace": "My track",
+    "error": "No track to export !"
   },
   
   "runstats": {

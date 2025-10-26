@@ -19,6 +19,7 @@ export default function GPXExporter({
 }: GPXExporterProps) {
     const t = useTranslations('gpxexporter');
   const [trackName, setTrackName] = useState<string>(t('my_trace'));
+  const [error, setError] = useState<string | null>(null);
   
 
   const getLocalDateTime = () => {
@@ -33,7 +34,10 @@ export default function GPXExporter({
 
 const [startTime, setStartTime] = useState(getLocalDateTime());
 
-  const clearPositions = (): void => setPositions([]);
+  const clearPositions = (): void => {
+    setPositions([])
+    setError(null);
+  };
 
   // Parse "mm:ss" en minutes décimales
   const parsePace = (paceStr: string): number => {
@@ -107,7 +111,7 @@ const [startTime, setStartTime] = useState(getLocalDateTime());
 
   const downloadGPX = (): void => {
     if (!points || points.length === 0) {
-      alert("Aucun point à exporter !");
+      setError(t('error'));
       return;
     }
     const gpxContent = generateGPX(trackName, points, paceStr);
@@ -118,7 +122,7 @@ const [startTime, setStartTime] = useState(getLocalDateTime());
     a.download = `${trackName.replace(/\s/g, "_")}.gpx`;
     a.click();
     URL.revokeObjectURL(url);
-
+    setError(null);
     clearPositions();
   };
 
@@ -152,7 +156,13 @@ const [startTime, setStartTime] = useState(getLocalDateTime());
           />
         </label>
 
-        <div className="flex md:flex-col justify-between  mt-2 md:space-y-2">
+        {error ? (
+  <p className="text-red-600 text-sm h-3 -mt-2">{error}</p>
+) : (
+  <p className="h-3 -mt-2" />
+)}
+
+        <div className="flex md:flex-col justify-between  md:space-y-2">
           <Button onClick={downloadGPX} className="bg-strava! w-auto font-semibold! md:w-full">
             {t('download_gpx')}
           </Button>

@@ -9,7 +9,8 @@
     "average_pace": "Allure moyenne (min/km)",
     "clear_button": "Effacer parcours",
     "download_gpx": "Télécharger",
-    "my_trace": "Mon parcours"
+    "my_trace": "Mon parcours",
+    "error": "Aucun parcours à exporter !"
   },
   
   "runstats": {
@@ -22,4 +23,5 @@
   "map": {
     "search": "Rechercher une adresse"
   }
+
 }
