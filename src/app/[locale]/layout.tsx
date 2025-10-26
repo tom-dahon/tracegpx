@@ -3,9 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import NavBar from "@/components/NavBar";
 import Script from "next/script";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { NextIntlClientProvider, hasLocale, useTranslations } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 // ----------------------------
 // Fonts
@@ -23,14 +24,20 @@ const geistMono = Geist_Mono({
 // ----------------------------
 // SEO metadata
 // ----------------------------
-export const metadata: Metadata = {
-  title: "TraceGpx – Create your GPX running route in one click",
-  description:
-    "TraceGpx lets you easily draw your running route on a map and download your GPX file for Strava, Garmin, and more.",
+type Params = { params: { locale: string } };
+
+export async function generateMetadata({params}: Params) {
+  const {locale} = await params;
+  const t = await getTranslations({locale, namespace: 'metadata'});
+ 
+  return {
+    title: t("title"), // "TraceGpx – Créez votre parcours de course en un clic"
+  description: t("description"), 
+  // "TraceGpx vous permet de dessiner facilement votre parcours de course sur une carte et de télécharger votre fichier GPX pour Strava, Garmin, et plus.",
   openGraph: {
-    title: "TraceGpx – Draw your running route",
-    description:
-      "Draw your route, download your GPX file, and share it easily.",
+    title: t("og.title"), // "TraceGpx – Dessinez votre parcours de course"
+    description: t("og.description"), 
+    // "Dessinez votre parcours, téléchargez votre fichier GPX et partagez-le facilement."
     url: "https://tracegpx.app",
     siteName: "TraceGpx",
     images: [
@@ -38,13 +45,14 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "TraceGpx interface preview",
+        alt: t("og.alt"), // "Aperçu de l'interface TraceGpx"
       },
     ],
-    locale: "fr_FR",
+    locale: locale,
     type: "website",
-  },
-};
+  }
+}
+}
 
 // ----------------------------
 // Types

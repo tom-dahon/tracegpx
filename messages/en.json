@@ -25,5 +25,15 @@
 
   "map": {
     "search": "Search for an address"
+  },
+
+  "metadata": {
+    "title": "TraceGpx – Create your GPX running route in one click",
+    "description": "TraceGpx lets you easily draw your running route on a map and download your GPX file for Strava, Garmin, and more.",
+    "og": {
+      "title": "TraceGpx – Draw your running route",
+      "description": "Draw your route, download your GPX file, and share it easily.",
+      "alt": "TraceGpx interface preview"
+    }
   }
 }

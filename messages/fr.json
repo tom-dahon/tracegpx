@@ -24,6 +24,18 @@
 
   "map": {
     "search": "Rechercher une adresse"
+  },
+
+  "metadata": {
+    "title": "TraceGpx – Créez votre parcours de course en un clic",
+    "description": "TraceGpx vous permet de dessiner facilement votre parcours de course sur une carte et de télécharger votre fichier GPX pour Strava, Garmin, et plus.",
+    "og": {
+      "title": "TraceGpx – Dessinez votre parcours de course",
+      "description": "Dessinez votre parcours, téléchargez votre fichier GPX et partagez-le facilement.",
+      "alt": "Aperçu de l'interface TraceGpx"
+    }
   }
+
+  
 
 }
