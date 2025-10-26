@@ -2,10 +2,13 @@
 import { useState } from 'react';
 import { MapPinIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import LanguageSwitch from './LanguageSwitch';
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const t = useTranslations();
 
   const changeLocale = (locale: string) => {
     router.push(`/${locale}${window.location.pathname}`);
@@ -27,16 +30,10 @@ export default function NavBar() {
           onClick={() => window.open('https://forms.gle/LmyEcgzK7an579kZ8', '_blank')}
           className="text-white font-semibold hover:underline"
         >
-          Donner ton avis
+          {t('navbar.feedback')}
         </button>
-        <div className="flex gap-2">
-          <button onClick={() => changeLocale('fr')} className="px-2 py-1 rounded hover:bg-white/30 text-white">
-            FR
-          </button>
-          <button onClick={() => changeLocale('en')} className="px-2 py-1 rounded hover:bg-white/30 text-white">
-            EN
-          </button>
-        </div>
+            <LanguageSwitch/>
+
       </div>
 
       {/* Mobile hamburger */}
@@ -53,16 +50,9 @@ export default function NavBar() {
       onClick={() => window.open('https://forms.gle/LmyEcgzK7an579kZ8', '_blank')}
       className="text-[#fc4c02] hover:underline font-semibold cursor-pointer"
     >
-      Donner ton avis
+      {t('navbar.feedback')}
     </button>
-    <div className="flex gap-2 mx-auto">
-      <button onClick={() => changeLocale('fr')} className="px-2 py-1 hover:bg-[#fc4c02] hover:text-white rounded bg-gray-200 cursor-pointer">
-        FR
-      </button>
-      <button onClick={() => changeLocale('en')} className="px-2 py-1 hover:bg-[#fc4c02] hover:text-white rounded bg-gray-200 cursor-pointer">
-        EN
-      </button>
-    </div>
+    <LanguageSwitch/>
   </div>
 )}
     </nav>

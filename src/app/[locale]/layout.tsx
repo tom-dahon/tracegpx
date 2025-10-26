@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import NavBar from "@/components/NavBar";
 import Script from "next/script";
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import fr from "../../../messages/fr.json";
+import en from "../../../messages/en.json";
+import { routing } from "@/i18n/routing";
+import { notFound } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,20 +41,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+// Mapping des messages
+const messages = { fr, en };
+
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
+  params: Promise<{locale: string}>;
+}
+
+export default async function RootLayout({ children, params }: RootLayoutProps) {
+const {locale} = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
   return (
-    <html lang="fr">
+    <html>
       <head>
         <meta name="google-site-verification" content="Q3AvoEcyxM-ZP5OPXf-rDv9neMkjkTT2Vs13s4iFjLw" />
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
           rel="stylesheet"
         />
-        {/* Google tag (gtag.js) */}
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-1835B48Q2B" strategy="afterInteractive" />
         <Script id="google-analytics" strategy="afterInteractive">
           {`
@@ -61,8 +74,11 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-50`}>
-        <NavBar />
-        {children}
+        {/* NextIntlClientProvider est un Client Component, pas de problème ici */}
+        <NextIntlClientProvider>
+          <NavBar />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );
