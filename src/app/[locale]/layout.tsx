@@ -42,7 +42,7 @@ export async function generateMetadata({params}: Params) {
     siteName: "TraceGpx",
     images: [
       {
-        url: "/og-image.png",
+        url: "/favicon.ico",
         width: 1200,
         height: 630,
         alt: t("og.alt"), // "Aperçu de l'interface TraceGpx"
