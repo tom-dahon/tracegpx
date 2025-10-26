@@ -1,55 +1,50 @@
 // components/Button.tsx
-import React, { CSSProperties } from "react";
-import { ReactNode } from "react";
+"use client";
 
-interface ButtonProps {
-  children: ReactNode;
-  onClick?: () => void;
-  color?: string;
-  textColor?: string;
-  disabled?: boolean;
-  style?: CSSProperties;
-  className?: string;
+import React from "react";
+import clsx from "clsx";
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  color?: string;           // Custom background color (optional)
+  textColor?: string;       // Custom text color (optional)
 }
 
+/**
+ * Generic, accessible, and style-safe Button component.
+ * Combines Tailwind defaults with optional inline customization.
+ */
 export default function Button({
-   children,
-  onClick,
-  color = "#0070f3",
-  textColor = "white",
+  children,
+  color,
+  textColor,
   disabled = false,
-  style = {},
-  className = "",
+  className,
+  style,
+  ...props
 }: ButtonProps) {
-  const baseStyle = {
+  const dynamicStyle: React.CSSProperties = {
     backgroundColor: color,
     color: textColor,
-    padding: "12px 12px",
-    borderRadius: "8px", // radius par défaut
-    border: "none",
-    cursor: disabled ? "not-allowed" : "pointer",
-    fontWeight: "medium",
-    fontSize: "16px",
-    transition: "0.2s all",
     ...style,
-  };
-
-  // Hover effect simple
-  const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!disabled) e.currentTarget.style.opacity = '0.85';
-  };
-  const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!disabled) e.currentTarget.style.opacity = '1';
   };
 
   return (
     <button
-      onClick={onClick}
+      {...props}
       disabled={disabled}
-      style={baseStyle}
-      className={className}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      style={dynamicStyle}
+      className={clsx(
+        // Base styles
+        "px-4 py-2 rounded-lg font-medium transition-all duration-200",
+        "focus:outline-none focus:ring-2 focus:ring-offset-2",
+        // Disabled styles
+        disabled
+          ? "opacity-60 cursor-not-allowed"
+          : "hover:opacity-90 active:scale-[0.98]",
+        // Tailwind color fallback (if no inline color)
+        !color && "bg-blue-500 text-white",
+        className
+      )}
     >
       {children}
     </button>
