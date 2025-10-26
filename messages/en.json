@@ -1,5 +1,21 @@
 {
     "navbar": {
-    "feedback": "Give feedback"
+      "feedback": "Give feedback"
+  },
+
+  "gpxexporter": {
+    "route": "Route name",
+    "start_date": "Start Date & Time",
+    "average_pace": "Average Pace (min/km)",
+    "clear_button": "Clear Route",
+    "download_gpx": "Download",
+    "my_trace": "My track"
+  },
+  
+  "runstats": {
+    "title": "Run Statistics",
+    "distance": "Distance",
+    "duration": "Duration",
+    "altitude": "Altitude"
   }
 }

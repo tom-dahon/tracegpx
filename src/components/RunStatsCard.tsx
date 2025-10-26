@@ -1,4 +1,5 @@
 'use client';
+import { useTranslations } from "next-intl";
 import React, { useMemo } from "react";
 
 type Point = [number, number, number?];
@@ -61,19 +62,21 @@ export default function RunStatsCard({ points, paceStr }: RunStatsCardProps) {
     return { distance, duration: durationSec, elevation };
   }, [points, paceStr]);
 
+  const t = useTranslations('runstats');
+
   return (
     <div className="p-3 -mt-2 w-full mx-auto">
-      <h2 className="font-bold text-md mb-2">Statistiques de la course</h2>
+      <h2 className="font-bold text-md mb-2">{t('title')}</h2>
       <div className="flex justify-between text-gray-500">
-        <span>Distance</span>
+        <span>{t('distance')}</span>
         <span>{stats.distance.toFixed(2)} km</span>
       </div>
       <div className="flex justify-between text-gray-500">
-        <span>Durée</span>
+        <span>{t('duration')}</span>
         <span>{formatDuration(stats.duration)}</span>
       </div>
       <div className="flex justify-between text-gray-500">
-        <span>Altitude</span>
+        <span>{t('altitude')}</span>
         <span>{stats.elevation.toFixed(0)} m</span>
       </div>
     </div>

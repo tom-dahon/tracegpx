@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Input from "../components/Input";
 import Button from "./Button";
+import { useTranslations } from "next-intl";
 
 interface GPXExporterProps {
   points: [number, number][]; // tableau de paires [lat, lon]
@@ -16,7 +17,8 @@ export default function GPXExporter({
   setPaceStr,
   setPositions,
 }: GPXExporterProps) {
-  const [trackName, setTrackName] = useState<string>("Mon tracé");
+    const t = useTranslations('gpxexporter');
+  const [trackName, setTrackName] = useState<string>(t('my_trace'));
   const [startTime, setStartTime] = useState<string>(
     new Date().toISOString().slice(0, 16)
   );
@@ -110,11 +112,12 @@ export default function GPXExporter({
     clearPositions();
   };
 
+
   return (
     <div className="flex justify-center p-3">
       <div className="w-full max-w-[1200px] flex flex-col gap-4">
         <label className="flex flex-col gap-1">
-          <span className="font-semibold">Nom du parcours</span>
+          <span className="font-semibold">{t('route')}</span>
           <Input
             value={trackName}
             onChange={(e) => setTrackName(e.target.value)}
@@ -122,7 +125,7 @@ export default function GPXExporter({
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="font-semibold">Date et heure de début :</span>
+          <span className="font-semibold">{t('start_date')}</span>
           <Input
             type="datetime-local"
             value={startTime}
@@ -131,7 +134,7 @@ export default function GPXExporter({
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="font-semibold">Allure moyenne (min/km)</span>
+          <span className="font-semibold">{t('average_pace')}</span>
           <Input
             type="text"
             value={paceStr}
@@ -141,14 +144,14 @@ export default function GPXExporter({
 
         <div className="flex md:flex-col justify-between  mt-2 md:space-y-2">
           <Button onClick={downloadGPX} className="bg-blue-400! w-auto font-semibold! md:w-full" style={{backgroundColor: '#fc4c02 !important'}}>
-            Télécharger GPX
+            {t('download_gpx')}
           </Button>
 
           <Button
             onClick={clearPositions}
             className="bg-gray-100! text-gray-800! font-semibold! w-auto md:w-full"
           >
-            Effacer le parcours
+            {t('clear_button')}
           </Button>
         </div>
       </div>
