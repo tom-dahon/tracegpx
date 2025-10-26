@@ -67,23 +67,29 @@ export default function GPXExporter({
 
   /** Download GPX file */
   const downloadGPX = (): void => {
-    if (!points || points.length === 0) {
-      setError("NO_POINTS");
-      return;
-    }
+  if (!points || points.length === 0) {
+    setError("NO_POINTS");
+    return;
+  }
 
-    if (!trackName.trim()) {
-      setError("NO_TRACK_NAME");
-      return;
-    }
+  if (!trackName.trim()) {
+    setError("NO_TRACK_NAME");
+    return;
+  }
 
-    if (!validatePace()) return;
+  if (!validatePace()) return;
 
-    const gpxContent = generateGPX(trackName, points, paceStr, startTime);
-    downloadFile(gpxContent, trackName);
+  const gpxContent = generateGPX(trackName, points, paceStr, startTime);
 
-    clearPositions();
-  };
+  const filename = trackName.toLowerCase().endsWith(".gpx")
+    ? trackName
+    : `${trackName}.gpx`;
+
+  downloadFile(gpxContent, filename);
+
+  clearPositions();
+};
+
 
   /** Return localized error message */
   const errorMessage = (): string => {
