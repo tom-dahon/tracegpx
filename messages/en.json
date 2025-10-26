@@ -11,7 +11,9 @@
     "download_gpx": "Download",
     "my_trace": "My track",
     "error_no_points": "No track to export !",
-    "error_invalid_pace": "Pace is invalid"
+    "error_invalid_pace": "Pace is invalid",
+    "error_no_track_name": "Track name is required"
+
   },
   
   "runstats": {

@@ -11,7 +11,8 @@
     "download_gpx": "Télécharger",
     "my_trace": "Mon parcours",
     "error_no_points": "Aucun parcours à exporter !",
-    "error_invalid_pace": "L'allure est invalide"
+    "error_invalid_pace": "L'allure est invalide",
+    "error_no_track_name": "Le nom du parcours est obligatoire"
   },
   
   "runstats": {
