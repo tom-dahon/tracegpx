@@ -21,7 +21,7 @@ export default function HomePage() {
   const [paceStr, setPaceStr] = useState<string>("5:00");
 
   return (
-    <main className="w-full px-4 lg:px-8 py-8 font-sans dark:bg-black mx-auto flex flex-col gap-8">
+    <main className="w-full px-4 lg:px-8 py-8 font-sans mx-auto flex flex-col gap-8">
       <section className="flex flex-col md:flex-row gap-4 md:items-start">
         
         {/* Map section */}

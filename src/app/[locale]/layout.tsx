@@ -99,7 +99,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
       </head>
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-50 text-zinc-900`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-50! text-zinc-900!`}
       >
         <NextIntlClientProvider>
           <NavBar />
