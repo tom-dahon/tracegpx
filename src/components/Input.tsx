@@ -30,7 +30,7 @@ export default function Input({
         // Style de base
         "w-full px-4 py-3 rounded-lg border border-gray-300 text-base shadow-sm outline-none transition-all duration-200",
         // Harmonisation mobile pour type=date
-        type === "date" && "appearance-none min-w-0 max-w-full",
+        type === "datetime-local" && "appearance-none min-w-0 max-w-full",
         // États
         "focus:border-blue-500 focus:shadow-md focus:shadow-blue-200",
         disabled && "bg-gray-100 cursor-not-allowed opacity-75",
