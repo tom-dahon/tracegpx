@@ -1,33 +1,14 @@
 'use client';
+import { getDistance, parsePace } from "@/utils/gpx";
 import { useTranslations } from "next-intl";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 
 type Point = [number, number, number?];
 
 interface RunStatsCardProps {
   points: Point[];
   paceStr: string;
-}
-
-// Fonction utilitaire pour calculer la distance entre 2 points en km
-function getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
-// Parse "mm:ss" en minutes décimales
-function parsePace(paceStr: string): number {
-  const parts = paceStr.split(":").map(Number);
-  if (parts.length === 1) return parts[0];
-  return parts[0] + parts[1] / 60;
+  onDurationChange?: (durationSec: number) => void;
 }
 
 // Format hh:mm:ss
@@ -38,7 +19,7 @@ function formatDuration(sec: number): string {
   return [h, m, s].map((v) => v.toString().padStart(2, "0")).join(":");
 }
 
-export default function RunStatsCard({ points, paceStr }: RunStatsCardProps) {
+export default function RunStatsCard({ points, paceStr, onDurationChange }: RunStatsCardProps) {
   const stats = useMemo(() => {
     if (!points || points.length < 2)
       return { distance: 0, duration: 0, elevation: 0 };
@@ -61,6 +42,13 @@ export default function RunStatsCard({ points, paceStr }: RunStatsCardProps) {
 
     return { distance, duration: durationSec, elevation };
   }, [points, paceStr]);
+
+  // 🔹 Notifier le parent après le rendu
+  useEffect(() => {
+    if (onDurationChange) {
+      onDurationChange(stats.duration);
+    }
+  }, [stats.duration, onDurationChange]);
 
   const t = useTranslations('runstats');
 

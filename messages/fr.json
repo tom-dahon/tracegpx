@@ -12,7 +12,8 @@
     "my_trace": "Mon parcours",
     "error_no_points": "Aucun parcours à exporter !",
     "error_invalid_pace": "L'allure est invalide",
-    "error_no_track_name": "Le nom du parcours est obligatoire"
+    "error_no_track_name": "Le nom du parcours est obligatoire",
+    "error_date_exceeds_now": "La fin de la course dépasse l’heure actuelle. Veuillez ajuster la date de début ou l’allure pour générer un fichier valide."
   },
   
   "runstats": {

@@ -9,13 +9,14 @@ import { getLocalDateTime } from "@/utils/date";
 import { downloadFile } from "@/utils/download";
 
 export type LatLng = [number, number];
-export type GPXError = "NO_POINTS" | "INVALID_PACE" | "NO_TRACK_NAME" | null;
+export type GPXError = "NO_POINTS" | "INVALID_PACE" | "NO_TRACK_NAME" | "DATE_EXCEEDS_NOW" | null;
 
 interface GPXExporterProps {
   points: LatLng[];
   paceStr: string;
   setPaceStr: React.Dispatch<React.SetStateAction<string>>;
   setPositions: React.Dispatch<React.SetStateAction<LatLng[]>>;
+  duration: number
 }
 
 /**
@@ -26,6 +27,7 @@ export default function GPXExporter({
   paceStr,
   setPaceStr,
   setPositions,
+  duration
 }: GPXExporterProps) {
   const t = useTranslations("gpxexporter");
 
@@ -38,10 +40,10 @@ export default function GPXExporter({
   // Key to force re-render for smooth reset animation
   const [resetKey, setResetKey] = useState<number>(0);
 
-  // Automatically clear error after 4 seconds
+  // Automatically clear error after 10 seconds
   useEffect(() => {
     if (error) {
-      const timer = setTimeout(() => setError(null), 4000);
+      const timer = setTimeout(() => setError(null), 10000);
       return () => clearTimeout(timer);
     }
   }, [error]);
@@ -77,6 +79,14 @@ export default function GPXExporter({
     return;
   }
 
+  const startTimestamp = new Date(startTime).getTime();
+  const durationMs = duration * 1000;
+  if(startTimestamp + durationMs > Date.now()) {
+    setError("DATE_EXCEEDS_NOW");
+    return;
+}
+
+
   if (!validatePace()) return;
 
   const gpxContent = generateGPX(trackName, points, paceStr, startTime);
@@ -97,6 +107,7 @@ export default function GPXExporter({
       case "NO_POINTS": return t("error_no_points");
       case "INVALID_PACE": return t("error_invalid_pace");
       case "NO_TRACK_NAME": return t("error_no_track_name");
+      case "DATE_EXCEEDS_NOW": return t("error_date_exceeds_now");
       default: return "";
     }
   };
@@ -141,12 +152,7 @@ export default function GPXExporter({
           />
         </label>
 
-        {/* Error message */}
-        {error ? (
-          <p className="text-red-600 text-sm h-3 -mt-2">{errorMessage()}</p>
-        ) : (
-          <p className="h-3 -mt-2" />
-        )}
+       
 
         {/* Action buttons */}
         <div className="flex md:flex-col justify-between md:space-y-2">
@@ -167,6 +173,13 @@ export default function GPXExporter({
             {t("clear_button")}
           </Button>
         </div>
+
+         {/* Error message */}
+        {error ? (
+          <p className="text-red-600 text-sm h-5 -mt-2">{errorMessage()}</p>
+        ) : (
+          <p className="h-5 -mt-2" />
+        )}
       </div>
     </div>
   );
