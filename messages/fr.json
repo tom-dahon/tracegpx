@@ -35,6 +35,10 @@
       "description": "Dessinez votre parcours, téléchargez votre fichier GPX et partagez-le facilement.",
       "alt": "Aperçu de l'interface TraceGpx"
     }
+  },
+
+  "infobanner": {
+    "text": "Note : Ce projet est encore en évolution. Les fonctionnalités futures pourraient inclure des profils d’altitude, le suivi des allures intermédiaires, et plus encore."
   }
 
   

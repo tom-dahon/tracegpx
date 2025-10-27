@@ -8,7 +8,7 @@ import LanguageSwitch from './LanguageSwitch';
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const t = useTranslations();
+  const t = useTranslations("navbar");
 
   return (
     <nav className="relative flex justify-between items-center p-4 bg-[#fc4c02]">
@@ -26,7 +26,7 @@ export default function NavBar() {
           onClick={() => window.open('https://forms.gle/LmyEcgzK7an579kZ8', '_blank')}
           className="text-white font-semibold hover:underline cursor-pointer"
         >
-          {t('navbar.feedback')}
+          {t('feedback')}
         </button>
             <LanguageSwitch/>
 
@@ -46,7 +46,7 @@ export default function NavBar() {
       onClick={() => window.open('https://forms.gle/LmyEcgzK7an579kZ8', '_blank')}
       className="text-[#fc4c02] hover:underline font-semibold cursor-pointer"
     >
-      {t('navbar.feedback')}
+      {t('feedback')}
     </button>
     <LanguageSwitch/>
   </div>

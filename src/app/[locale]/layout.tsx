@@ -7,6 +7,7 @@ import { NextIntlClientProvider, hasLocale, useTranslations } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import InfoBanner from "@/components/InfoBanner";
 
 // ----------------------------
 // Fonts
@@ -103,6 +104,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
       >
         <NextIntlClientProvider>
           <NavBar />
+          <InfoBanner />
           <main>{children}</main>
         </NextIntlClientProvider>
       </body>

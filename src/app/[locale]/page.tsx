@@ -24,7 +24,7 @@ export default function HomePage() {
 
 
   return (
-    <main className="w-full px-4 lg:px-8 py-8 font-sans mx-auto flex flex-col gap-8">
+    <main className="w-full px-4 lg:px-8 py-4 font-sans mx-auto flex flex-col gap-8">
       <section className="flex flex-col md:flex-row gap-4 md:items-start">
         
         {/* Map section */}

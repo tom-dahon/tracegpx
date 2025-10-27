@@ -37,5 +37,9 @@
       "description": "Draw your route, download your GPX file, and share it easily.",
       "alt": "TraceGpx interface preview"
     }
+  },
+
+  "infobanner": {
+    "text": "Note: This project is still evolving. Future features may include altitude profiles, intermediate pace tracking, and more."
   }
 }
