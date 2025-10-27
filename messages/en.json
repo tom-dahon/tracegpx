@@ -12,7 +12,9 @@
     "my_trace": "My track",
     "error_no_points": "No track to export !",
     "error_invalid_pace": "Pace is invalid",
-    "error_no_track_name": "Track name is required"
+    "error_no_track_name": "Track name is required",
+    "error_date_exceeds_now": "The end of the run exceeds the current time. Please adjust the start date or pace to generate a valid file."
+
 
   },
   
