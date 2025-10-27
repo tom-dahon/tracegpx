@@ -42,7 +42,14 @@ export default function NavBar() {
       </div>
 
       {/* Mobile hamburger */}
-      <div className="md:hidden">
+      <div className="md:hidden flex items-center gap-x-4">
+<Link
+          href="/how-it-works"
+          className="text-white font-semibold hover:underline cursor-pointer"
+        >
+          {t('how_it_works')}
+        </Link>
+
         <button onClick={() => setOpen(!open)}>
           {open ? <XMarkIcon className="w-6 h-6 text-white cursor-pointer" /> : <Bars3Icon className="w-6 h-6 text-white cursor-pointer" />}
         </button>
@@ -51,12 +58,21 @@ export default function NavBar() {
       {/* Mobile dropdown */}
       {open && (
   <div className="fixed top-16 right-4 bg-white shadow-md rounded p-4 flex flex-col gap-2 z-[1000] md:hidden">
-    <button
-      onClick={() => window.open('https://forms.gle/LmyEcgzK7an579kZ8', '_blank')}
-      className="text-[#fc4c02] hover:underline font-semibold cursor-pointer"
-    >
-      {t('feedback')}
-    </button>
+    
+     <Link
+          href="/how-it-works"
+          className="text-strava font-semibold hover:underline cursor-pointer"
+        >
+          {t('how_it_works')}
+        </Link>
+
+        <Link
+          href="https://forms.gle/LmyEcgzK7an579kZ8"
+          className="text-strava font-semibold hover:underline cursor-pointer"
+          target="_blank"
+        >
+          {t('feedback')}
+        </Link>
     <LanguageSwitch/>
   </div>
 )}
