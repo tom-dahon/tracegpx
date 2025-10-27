@@ -1,6 +1,7 @@
 {
     "navbar": {
-      "feedback": "Donne ton avis"
+      "feedback": "Donne ton avis",
+      "how_it_works": "Comment ça marche"
   },
 
   "gpxexporter": {
@@ -39,7 +40,29 @@
 
   "infobanner": {
     "text": "Note : Ce projet est encore en évolution. Les fonctionnalités futures pourraient inclure des profils d’altitude, le suivi des allures intermédiaires, et plus encore."
+  },
+
+  "how-it-works": {
+    "title": "Comment fonctionne TraceGPX",
+    "generate_gpx_title": "Générez vos traces GPX",
+    "generate_gpx_text_1": "TraceGPX vous permet de créer rapidement et facilement des fichiers GPX à partir de vos parcours de course. Ajoutez vos points sur la carte, définissez votre allure et exportez un fichier GPX compatible avec Strava, Garmin ou tout autre appareil GPS.",
+    "generate_gpx_text_2": "L’outil calcule en temps réel la distance, le dénivelé et la durée, afin que vous ayez toujours des statistiques précises avant d’exporter votre trace.",
+    "import_strava_title": "Importer dans Strava",
+    "import_strava_text": "Une fois votre fichier GPX exporté, vous pouvez l’importer dans Strava en quelques étapes simples :",
+    "import_step_1": "Ouvrez Strava sur votre ordinateur et allez sur la page de téléchargement.",
+    "import_step_2": "Sélectionnez Fichier et choisissez le fichier GPX que vous avez exporté depuis TraceGPX.",
+    "import_step_3": "Vérifiez votre parcours et enregistrez-le. Strava affichera la route, la distance et l’allure.",
+    "video_unsupported": "Votre navigateur ne supporte pas la balise vidéo.",
+    "future_features_title": "Fonctionnalités à venir",
+    "future_features_text": "TraceGPX est encore en évolution. Les futures fonctionnalités pourraient inclure :",
+    "feature_altitude": "Profils d’altitude",
+    "feature_intermediate_pace": "Suivi des allures intermédiaires",
+    "feature_splits": "Fiches personnalisables et données de tours",
+    "feature_dashboard": "Tableau de statistiques amélioré",
+    "why_use_title": "Pourquoi utiliser TraceGPX ?",
+    "why_use_text": "Que ce soit pour vos sorties course ou vélo, TraceGPX vous permet de créer et visualiser vos parcours facilement, puis de les exporter vers Strava ou toute autre application GPS. Rapide, intuitif et efficace."
   }
+
 
   
 

@@ -1,6 +1,8 @@
 {
     "navbar": {
-      "feedback": "Give feedback"
+      "feedback": "Give feedback",
+      "how_it_works": "How it works"
+
   },
 
   "gpxexporter": {
@@ -41,5 +43,27 @@
 
   "infobanner": {
     "text": "Note: This project is still evolving. Future features may include altitude profiles, intermediate pace tracking, and more."
+  },
+
+  "how-it-works": {
+    "title": "How TraceGPX Works",
+    "generate_gpx_title": "Generate your GPX tracks",
+    "generate_gpx_text_1": "TraceGPX lets you create GPX files from your running routes quickly and easily. Add your route points on the map, set your pace, and export a GPX file compatible with Strava, Garmin, or any GPS device.",
+    "generate_gpx_text_2": "The tool calculates distance, elevation gain, and duration in real-time, so you always have accurate statistics before exporting your track.",
+    "import_strava_title": "Import into Strava",
+    "import_strava_text": "Once you have exported your GPX file, you can import it into Strava in a few simple steps:",
+    "import_step_1": "Open Strava on your computer and go to the Upload page.",
+    "import_step_2": "Select File and choose the GPX file you exported from TraceGPX.",
+    "import_step_3": "Review your track and save it. Strava will display the route, distance, and pace.",
+    "video_unsupported": "Your browser does not support the video tag.",
+    "future_features_title": "Future features",
+    "future_features_text": "TraceGPX is still evolving. Future features may include:",
+    "feature_altitude": "Altitude profiles",
+    "feature_intermediate_pace": "Intermediate pace tracking",
+    "feature_splits": "Customizable splits and lap data",
+    "feature_dashboard": "Improved statistics dashboard",
+    "why_use_title": "Why use TraceGPX?",
+    "why_use_text": "Whether running or cycling, TraceGPX lets you easily create and visualize your routes, then export them to Strava or any other GPS app. Fast, intuitive, and efficient."
   }
+
 }

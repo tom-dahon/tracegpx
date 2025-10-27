@@ -4,6 +4,7 @@ import { MapPinIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import LanguageSwitch from './LanguageSwitch';
+import Link from 'next/link';
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
@@ -22,12 +23,20 @@ export default function NavBar() {
 
       {/* Desktop menu */}
       <div className="hidden md:flex items-center gap-4">
-        <button
-          onClick={() => window.open('https://forms.gle/LmyEcgzK7an579kZ8', '_blank')}
+        <Link
+          href="/how-it-works"
           className="text-white font-semibold hover:underline cursor-pointer"
         >
+          {t('how_it_works')}
+        </Link>
+
+        <Link
+          href="https://forms.gle/LmyEcgzK7an579kZ8"
+          className="text-white font-semibold hover:underline cursor-pointer"
+          target="_blank"
+        >
           {t('feedback')}
-        </button>
+        </Link>
             <LanguageSwitch/>
 
       </div>
