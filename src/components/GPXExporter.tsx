@@ -5,7 +5,7 @@ import Input from "../components/Input";
 import Button from "./Button";
 import { useTranslations } from "next-intl";
 import { generateGPX } from "@/utils/gpx";
-import { getLocalDateTime } from "@/utils/date";
+import { getLocalDateTime, toLocalDateTime } from "@/utils/date";
 import { downloadFile } from "@/utils/download";
 
 export type LatLng = [number, number];
@@ -16,12 +16,12 @@ interface GPXExporterProps {
   paceStr: string;
   setPaceStr: React.Dispatch<React.SetStateAction<string>>;
   setPositions: React.Dispatch<React.SetStateAction<LatLng[]>>;
-  duration: number
+  duration: number; // en secondes
 }
 
-/**
- * GPXExporter component allows exporting a GPX file for the current route
- */
+/** marge de sécurité en ms pour éviter rebonds */
+const SAFETY_MARGIN_MS = 30 * 1000; // 30 secondes
+
 export default function GPXExporter({
   points,
   paceStr,
@@ -31,16 +31,12 @@ export default function GPXExporter({
 }: GPXExporterProps) {
   const t = useTranslations("gpxexporter");
 
-  // Track name state
   const [trackName, setTrackName] = useState<string>(t("my_trace"));
-  // Start time state
   const [startTime, setStartTime] = useState<string>(getLocalDateTime());
-  // Error state
   const [error, setError] = useState<GPXError>(null);
-  // Key to force re-render for smooth reset animation
   const [resetKey, setResetKey] = useState<number>(0);
 
-  // Automatically clear error after 10 seconds
+  // clear error automatically
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => setError(null), 10000);
@@ -48,17 +44,32 @@ export default function GPXExporter({
     }
   }, [error]);
 
-  /** Clears all points and resets all states */
+  // ajuste automatiquement startTime en temps réel si ça dépasse maintenant
+useEffect(() => {
+  if (duration <= 0) return;
+
+  const now = Date.now();
+  const durationMs = duration * 1000;
+  const startTimestamp = new Date(startTime).getTime();
+
+  if (startTimestamp + durationMs > now - SAFETY_MARGIN_MS) {
+    const adjustedStartTime = new Date(now - durationMs - SAFETY_MARGIN_MS);
+    const adjustedStr = toLocalDateTime(adjustedStartTime);
+    if (adjustedStr !== startTime) {
+      setStartTime(adjustedStr);
+    }
+  }
+}, [duration, startTime]);
+
   const clearPositions = (): void => {
     setPositions([]);
     setError(null);
     setTrackName("");
     setStartTime(getLocalDateTime());
     setPaceStr("");
-    setResetKey(prev => prev + 1); // force re-render for animation
+    setResetKey(prev => prev + 1);
   };
 
-  /** Validate pace string format mm:ss */
   const validatePace = (): boolean => {
     if (!/^(\d+:\d+)$/.test(paceStr)) {
       setError("INVALID_PACE");
@@ -67,41 +78,17 @@ export default function GPXExporter({
     return true;
   };
 
-  /** Download GPX file */
-  const downloadGPX = (): void => {
-  if (!points || points.length === 0) {
-    setError("NO_POINTS");
-    return;
-  }
+  const downloadGPXHandler = (): void => {
+    if (!points || points.length === 0) { setError("NO_POINTS"); return; }
+    if (!trackName.trim()) { setError("NO_TRACK_NAME"); return; }
+    if (!validatePace()) return;
 
-  if (!trackName.trim()) {
-    setError("NO_TRACK_NAME");
-    return;
-  }
+    const gpxContent = generateGPX(trackName, points, paceStr, new Date(startTime).toISOString());
+    const filename = trackName.toLowerCase().endsWith(".gpx") ? trackName : `${trackName}.gpx`;
+    downloadFile(gpxContent, filename);
+    clearPositions();
+  };
 
-  const startTimestamp = new Date(startTime).getTime();
-  const durationMs = duration * 1000;
-  if(startTimestamp + durationMs > Date.now()) {
-    setError("DATE_EXCEEDS_NOW");
-    return;
-}
-
-
-  if (!validatePace()) return;
-
-  const gpxContent = generateGPX(trackName, points, paceStr, startTime);
-
-  const filename = trackName.toLowerCase().endsWith(".gpx")
-    ? trackName
-    : `${trackName}.gpx`;
-
-  downloadFile(gpxContent, filename);
-
-  clearPositions();
-};
-
-
-  /** Return localized error message */
   const errorMessage = (): string => {
     switch (error) {
       case "NO_POINTS": return t("error_no_points");
@@ -115,23 +102,20 @@ export default function GPXExporter({
   return (
     <div className="flex justify-center p-3">
       <div className="w-full max-w-[1200px] flex flex-col gap-4">
-
-        {/* Track name input */}
-        <label htmlFor="trackName" className="flex flex-col gap-1">
+        <label className="flex flex-col gap-1">
           <span className="font-semibold">{t("route")}</span>
           <Input
-            key={`track-${resetKey}`} // force re-render for smooth reset
+            key={`track-${resetKey}`}
             value={trackName}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setTrackName(e.target.value)}
             className="transition-all duration-300"
           />
         </label>
 
-        {/* Start date and time input */}
-        <label htmlFor="startTime" className="flex flex-col gap-1">
+        <label className="flex flex-col gap-1">
           <span className="font-semibold">{t("start_date")}</span>
           <Input
-            key={`start-${resetKey}`} // force re-render for smooth reset
+            key={`start-${resetKey}`}
             type="datetime-local"
             value={startTime}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setStartTime(e.target.value)}
@@ -139,25 +123,21 @@ export default function GPXExporter({
           />
         </label>
 
-        {/* Average pace input */}
         <label className="flex flex-col gap-1">
           <span className="font-semibold">{t("average_pace")}</span>
           <Input
-            key={`pace-${resetKey}`} // force re-render for smooth reset
+            key={`pace-${resetKey}`}
             type="text"
             value={paceStr}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPaceStr(e.target.value)}
-            className="transition-all duration-300"
             placeholder="5:00"
+            className="transition-all duration-300"
           />
         </label>
 
-       
-
-        {/* Action buttons */}
         <div className="flex md:flex-col justify-between md:space-y-2">
           <Button
-            onClick={downloadGPX}
+            onClick={downloadGPXHandler}
             textColor="white"
             className="w-auto bg-strava font-semibold md:w-full"
           >
@@ -174,7 +154,6 @@ export default function GPXExporter({
           </Button>
         </div>
 
-         {/* Error message */}
         {error ? (
           <p className="text-red-600 text-sm h-5 -mt-2">{errorMessage()}</p>
         ) : (
