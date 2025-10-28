@@ -1,12 +1,12 @@
-# TraceIt
+# TraceGPX
 
 **Dessinez votre parcours et exportez-le en GPX compatible Strava / Zwift.**
-
+🔗 Découvrez la démo : [https://tracegpx.com](https://tracegpx.com)
 ---
 
 ## 🎯 Objectif
 
-TraceIt est un outil simple pour créer des parcours GPS personnalisés :  
+TraceGPX est un outil simple pour créer des parcours GPS personnalisés :  
 
 - Dessinez directement sur une carte interactive.  
 - Export GPX compatible Strava, Zwift, Garmin ou tout autre logiciel / application GPS.  
