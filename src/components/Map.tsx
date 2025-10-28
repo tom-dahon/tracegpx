@@ -25,7 +25,7 @@ const markerIcon = new L.Icon({
 });
 
 export default function Map({ positions, setPositions }: MapProps) {
-  const defaultCenter: [number, number] = [43.6, 7.0];
+  const defaultCenter: [number, number] = [48.8566, 2.3522];
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const mapRef = useRef<L.Map | null>(null);
