@@ -78,10 +78,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
     <html lang={locale}>
       <head>
         {/* SEO and verification */}
-        <meta
-          name="google-site-verification"
-          content="Q3AvoEcyxM-ZP5OPXf-rDv9neMkjkTT2Vs13s4iFjLw"
-        />
+        <meta name="google-site-verification" content="tzAhgd-gMWguoPjoJirV9k2WEaHFusZb9inh3uIIxUg" />
 
         {/* Google Analytics */}
         <Script
