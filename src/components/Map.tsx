@@ -118,7 +118,9 @@ export default function Map({ positions, setPositions }: MapProps) {
   </MapContainer>
 
   {/* Barre + bouton pour desktop */}
-  <div className="hidden md:flex absolute top-2 left-1/2 -translate-x-1/2 gap-2 items-center z-[900]">
+  {/* Barre + bouton pour desktop */}
+<div className="hidden md:flex absolute top-2 left-1/2 -translate-x-1/2 gap-2 items-start z-[900]">
+  <div className="relative">
     <input
       type="text"
       value={query}
@@ -126,24 +128,21 @@ export default function Map({ positions, setPositions }: MapProps) {
       placeholder={t('search') + '...'}
       className="w-80 px-4 py-2 rounded-xl bg-white border border-gray-300 shadow-sm text-sm focus:outline-none"
     />
-    <button
-      onClick={removeLastPosition}
-      className="bg-white rounded-full p-2 shadow hover:bg-gray-100 cursor-pointer"
-      title="Supprimer dernier marker"
-    >
-      <ArrowUturnLeftIcon className="w-5 h-5 text-gray-700" />
-    </button>
+    {suggestions.length > 0 && (
+      <ul className="absolute top-full left-0 right-0 bg-white border border-gray-200 shadow-md rounded-b-xl max-h-48 overflow-y-auto text-sm z-[950]">
+        {suggestions.map((item, i) => (
+          <li
+            key={i}
+            onClick={() => handleSelect(item)}
+            className="px-3 py-2 hover:bg-blue-100 cursor-pointer"
+          >
+            {item.display_name}
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 
-  {/* Barre + bouton pour mobile */}
-  <div className="flex md:hidden flex-row gap-2 mt-2 items-center">
-  <input
-    type="text"
-    value={query}
-    onChange={(e) => setQuery(e.target.value)}
-    placeholder={t('search') + '...'}
-    className="flex-1 px-4 py-2 rounded-xl bg-white border border-gray-300 shadow-sm text-sm focus:outline-none"
-  />
   <button
     onClick={removeLastPosition}
     className="bg-white rounded-full p-2 shadow hover:bg-gray-100 cursor-pointer"
@@ -152,6 +151,42 @@ export default function Map({ positions, setPositions }: MapProps) {
     <ArrowUturnLeftIcon className="w-5 h-5 text-gray-700" />
   </button>
 </div>
+
+
+  {/* Barre + bouton pour mobile */}
+<div className="flex md:hidden flex-row gap-2 mt-2 items-center">
+  <div className="relative flex-1">
+    <input
+      type="text"
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      placeholder={t('search') + '...'}
+      className="w-full px-4 py-2 rounded-xl bg-white border border-gray-300 shadow-sm text-sm focus:outline-none"
+    />
+    {suggestions.length > 0 && (
+      <ul className="absolute top-full left-0 right-0 bg-white border border-gray-200 shadow-md rounded-b-xl max-h-48 overflow-y-auto text-sm z-[950]">
+        {suggestions.map((item, i) => (
+          <li
+            key={i}
+            onClick={() => handleSelect(item)}
+            className="px-3 py-2 hover:bg-blue-100 cursor-pointer"
+          >
+            {item.display_name}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+
+  <button
+    onClick={removeLastPosition}
+    className="bg-white rounded-full p-2 shadow hover:bg-gray-100 cursor-pointer"
+    title="Supprimer dernier marker"
+  >
+    <ArrowUturnLeftIcon className="w-5 h-5 text-gray-700" />
+  </button>
+</div>
+
 </div>
   );
 }
