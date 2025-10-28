@@ -16,9 +16,9 @@ export default function NavBar() {
       {/* Logo */}
       <div className="flex items-center gap-2">
         <MapPinIcon className="w-7 h-7 text-white" />
-        <span className="font-semibold text-white text-2xl" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <a href="/" className="font-semibold text-white text-2xl" style={{ fontFamily: 'Poppins, sans-serif' }}>
           TraceGPX
-        </span>
+        </a>
       </div>
 
       {/* Desktop menu */}
