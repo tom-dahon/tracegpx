@@ -92,63 +92,66 @@ export default function Map({ positions, setPositions }: MapProps) {
 
   return (
     <div className="w-full mx-auto relative">
+  {/* Carte Leaflet */}
+  <MapContainer
+    center={defaultCenter}
+    zoom={12}
+    ref={mapRef}
+    style={{
+      width: '100%',
+      minHeight: '250px',
+      height: '35vh',
+      borderRadius: '10px',
+    }}
+    className="md:h-[80vh]!"
+  >
+    <TileLayer
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      detectRetina={true}
+    />
+    <LocationMarker />
+    {positions.length > 1 && <Polyline positions={positions} color="red" />}
+    {positions.map((pos, i) => (
+      <Marker key={i} position={pos} icon={markerIcon} />
+    ))}
+  </MapContainer>
 
-      <button
-  onClick={removeLastPosition}
-  className="absolute top-2 right-3 z-[900] bg-white  rounded-full p-2 shadow hover:bg-gray-100 cursor-pointer"
-  title="Supprimer dernier marker"
->
-  <ArrowUturnLeftIcon className="w-5 h-5 text-gray-700" />
-</button>
+  {/* Barre + bouton pour desktop */}
+  <div className="hidden md:flex absolute top-2 left-1/2 -translate-x-1/2 gap-2 items-center z-[900]">
+    <input
+      type="text"
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      placeholder={t('search') + '...'}
+      className="w-80 px-4 py-2 rounded-xl bg-white border border-gray-300 shadow-sm text-sm focus:outline-none"
+    />
+    <button
+      onClick={removeLastPosition}
+      className="bg-white rounded-full p-2 shadow hover:bg-gray-100 cursor-pointer"
+      title="Supprimer dernier marker"
+    >
+      <ArrowUturnLeftIcon className="w-5 h-5 text-gray-700" />
+    </button>
+  </div>
 
-      {/* 🔍 Barre de recherche */}
-      <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[900] w-80">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder= {t('search') + '...'}
-          className="w-full px-4 py-2 rounded-xl bg-white border border-gray-300 shadow-sm text-sm focus:outline-none"
-        />
-        {suggestions.length > 0 && (
-          <ul className="bg-white border border-gray-200 shadow-md rounded-b-xl max-h-48 overflow-y-auto text-sm">
-            {suggestions.map((item, i) => (
-              <li
-                key={i}
-                onClick={() => handleSelect(item)}
-                className="px-3 py-2 hover:bg-blue-100 cursor-pointer"
-              >
-                {item.display_name}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* 🗺️ Carte Leaflet */}
-      <MapContainer
-        center={defaultCenter}
-        zoom={12}
-        ref={mapRef}
-        style={{
-          width: '100%',
-          minHeight: '250px',
-          height: '35vh',
-          borderRadius: '10px',
-        }}
-        className="md:h-[80vh]!"
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          detectRetina={true}
-        />
-        <LocationMarker />
-        {positions.length > 1 && <Polyline positions={positions} color="red" />}
-        {positions.map((pos, i) => (
-          <Marker key={i} position={pos} icon={markerIcon} />
-        ))}
-      </MapContainer>
-    </div>
+  {/* Barre + bouton pour mobile */}
+  <div className="flex md:hidden flex-row gap-2 mt-2 items-center">
+  <input
+    type="text"
+    value={query}
+    onChange={(e) => setQuery(e.target.value)}
+    placeholder={t('search') + '...'}
+    className="flex-1 px-4 py-2 rounded-xl bg-white border border-gray-300 shadow-sm text-sm focus:outline-none"
+  />
+  <button
+    onClick={removeLastPosition}
+    className="bg-white rounded-full p-2 shadow hover:bg-gray-100 cursor-pointer"
+    title="Supprimer dernier marker"
+  >
+    <ArrowUturnLeftIcon className="w-5 h-5 text-gray-700" />
+  </button>
+</div>
+</div>
   );
 }
